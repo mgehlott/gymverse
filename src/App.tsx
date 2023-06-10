@@ -1,18 +1,36 @@
-import React, { useState } from 'react';
-import Navbar from '@/components/Navbar/Navbar';
-Navbar
+import React, { useEffect, useState } from "react";
+import Navbar from "@/components/Navbar/Navbar";
+import Home from "@/components/Home/Home";
 
 function App() {
-
   const [selectedPage, setSelectedPage] = useState<string>("home");
+  const [isTopofPage, setIsTopOfPage] = useState<boolean>(true);
+
+  useEffect(() => {
+    const handler = () => {
+      if (window.scrollY === 0) {
+        setIsTopOfPage(true);
+        setSelectedPage("home");
+      } else {
+        setIsTopOfPage(false);
+      }
+    };
+    window.addEventListener("scroll", handler);
+    return () => {
+      window.removeEventListener("scroll", handler);
+    };
+  }, []);
+
   return (
-    <div className='app'>
+    <div className="app">
       <Navbar
         selectedPage={selectedPage}
         setSelectedPage={setSelectedPage}
+        isTopOfPage={isTopofPage}
       />
-   </div>
-  )
+      <Home setSelectedPage={setSelectedPage} />
+    </div>
+  );
 }
 
 export default App;
